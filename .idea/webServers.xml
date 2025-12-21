@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6808d6b8-c78f-4670-8776-d96257912a43" name="sarge" url="http://localhost:8080">
+        <fileTransfer rootFolder="/var/www/" accessType="SFTP" host="localhost" port="2222" sshConfigId="13a6d95b-4c42-467b-b871-ee4a0d0aeceb" sshConfig="sarge@localhost:2222 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="30000" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

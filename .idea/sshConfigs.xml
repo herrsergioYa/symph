@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig connectionConfig="{&quot;serverAliveInterval&quot;:30}" host="localhost" id="13a6d95b-4c42-467b-b871-ee4a0d0aeceb" keyPath="$USER_HOME$/.ssh/id_rsa" port="2222" nameFormat="DESCRIPTIVE" username="sarge" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>
