@@ -1,0 +1,45 @@
+#Redirects certain domain's http to https AND delete www
+#RewriteCond %{HTTP_HOST} ^www\.example\.ru(:\d*)?$ [NC]
+#RewriteRule ^(.*)$ https://example.ru/$1 [R=301,L]
+# or without hardcode
+RewriteCond %{HTTP_HOST} ^www\.(.*):\d+$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+# or more sophisticated :-)
+#RewriteCond %{HTTP_HOST} ^www\.(.*):80$ [NC]
+#RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+#RewriteCond %{HTTP_HOST} ^www\.(.*):443$ [NC]
+#RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+
+#Redirects http to https
+#RewriteCond %{HTTPS} !=on
+#RewriteCond %{SERVER_PORT} ^80$
+RewriteCond %{HTTP:PORT} !^443$
+#RewriteCond %{HTTP:Host} :80$
+# RewriteCond %{ENV:HTTPS} !on
+# RewriteCond %{HTTPS} off
+# RewriteCond %{HTTP:X-Forwarded-Proto} !https
+#We can preserve HOST
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301] # Many times found BUT does not work! Don't use it!
+RewriteRule ^(.*)$ https://%{SERVER_NAME}%{REQUEST_URI} [L,R=301]
+# or hardcode some
+#RewriteRule ^(.*)$ https://example.ru/$1 [R=301,L]
+#RewriteRule ^(.*)$ https://example.ru%{REQUEST_URI} [R=301,L]
+
+# HTTPS =? on/off Or on only?
+# HTTP_HOST = example.ru:443
+# HTTP:PORT = 443
+# REQUEST_URI - self-explanatory
+# HTTP:Host - Forwarded by nginx (e.g. example.ru:443)
+# HTTP:X-Forwarded-Proto - Forwarded by nginx (e.g. https)
+# or
+# HTTP:X-Forwarded-Schema - Forwarded by nginx (e.g. https)
+
+# Переадресация с домена с WWW на домен без WWW
+RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# Переадресация с добавлением / в конце
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^.]+)(?<!/)$ /$1/ [R=301,L]

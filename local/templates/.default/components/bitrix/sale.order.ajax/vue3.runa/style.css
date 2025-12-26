@@ -1,0 +1,21 @@
+[v-cloak] {
+    display: none !important;
+}
+
+.select2.select2-container.select2-container--default {
+    width: 100% !important;
+}
+
+.checkout-block .form_discount .button-main.disabled {
+    opacity: 50%;
+    pointer-events: none;
+}
+
+.checkout-block .form_discount .button-main.coupon-clear:hover {
+    background-color: red;
+    color: white;
+}
+
+.soa-field-error {
+    color: red;
+}
