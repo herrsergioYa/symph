@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!function_exists('is_bitrix_included')) {
     function is_bitrix_included(): bool

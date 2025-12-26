@@ -34,7 +34,7 @@ final class HomeController extends AbstractController
             $product->setColor('silver');
         }
         $em->flush();
-        
+
         require __DIR__ . '/../../local/php_interface/init.php';
 
         gsv_dump(0);

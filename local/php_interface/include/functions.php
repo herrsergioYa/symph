@@ -165,7 +165,7 @@ function gsv_js_dump($arr, $meOnly = 'A', $fullStack = false)
     <script>
         console.log(<?= \CUtil::PhpToJSObject($files) ?>, <?= \CUtil::PhpToJSObject($arr) ?>);
     </script>
-    <?
+    <?php
 }
 
 function gsv_debug_trace($fullStack = true)
