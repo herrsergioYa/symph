@@ -35,6 +35,11 @@ final class HomeController extends AbstractController
         }
         $em->flush();
 
+        require __DIR__ . '/../../local/php_interface/init.php';
+
+        gsv_dump(0);
+        $b24app = new \Gsv\Util\Bitrix24\Bitrix24App();
+
         $dql = "SELECT p, c
         FROM App\Entity\Product p, App\Entity\Product c
         WHERE p.price > :minPrice";

@@ -1,0 +1,66 @@
+# ignore all
+*
+# white list
+!.gitignore
+!.gitconfig
+
+# NOT ignore
+!/www/
+!/www/**
+
+#ignore file types
+error_log*
+access_log*
+*.DS_Store
+*.log
+#*.txt
+*.sql
+#*.xml
+
+# BUT we must preserve modules
+!/www/bitrix/modules/**/*.sql
+#!/www/bitrix/modules/**/*.xml
+
+# BX ignore
+/www/bitrix/backup/
+!/www/bitrix/backup/*.php
+/www/bitrix/tmp/
+
+#Cache
+/www/bitrix/cache/
+/www/bitrix/managed_cache/
+/www/bitrix/stack_cache/
+/www/bitrix/local_cache/
+
+#Composite cache
+/www/bitrix/html_pages/
+!/www/bitrix/html_pages/.config.php
+!/www/bitrix/html_pages/.enabled
+
+#Catalog
+/www/bitrix/catalog_export/
+/www/bitrix/catalog_import/
+
+#Other bitrix directories & files
+/www/bitrix/tmp
+/www/bitrix/managed_flags/
+/www/bitrix/php_interface/crontab/
+/www/bitrix/crontab/
+/www/bitrix/license_key.php
+
+#Settings
+/www/bitrix/php_interface/dbconn.php
+/www/bitrix/php_interface/after_connect.php
+/www/bitrix/php_interface/after_connect_d7.php
+/www/bitrix/.settings.php
+/www/bitrix/.settings_extra.php
+
+#Upload
+/www/upload/
+
+#Other
+#/www/urlrewrite.php
+
+#BX white list
+!/www/robots.txt
+

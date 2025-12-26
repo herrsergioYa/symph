@@ -1,0 +1,15 @@
+<h3>{{ templateFile }}</h3>
+<select>
+    {{# arResult.ITEMS }}
+        {{!# helpers.iterValues }}
+    <option value="{{ VALUE }}">{{ NAME }}</option>
+            <!--option value="{{key}}-{{value}}">{{key}}-{{value}}</option-->
+        {{!/helpers.iterValues}}
+    {{/ arResult.ITEMS }}
+</select>
+{{# arResult.OBJ }}
+{{!# helpers.iterObj }}
+    <p>{{key}} - {{value}}</p>
+{{!/ helpers.iterObj }}
+{{/arResult.OBJ}}
+{{{arResult.JS_OBJ}}}

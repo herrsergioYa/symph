@@ -1,0 +1,6 @@
+<h3>{{ templateFile }}</h3>
+<select>
+    {% for item in arResult.ITEMS %}
+        <option value="{{ item.VALUE }}">{{ item.NAME }}</option>
+    {% endfor %}
+</select>

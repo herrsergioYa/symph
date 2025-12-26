@@ -1,0 +1,9 @@
+<? if (!defined ("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+ob_start();
+(function() use($arResult) {
+    require $arResult['FILE'];
+})();
+$content = ob_get_clean();
+$cleaned = urlencode($content);
+?><a target="_blank" href="https://yandex.ru/maps/?text=<?= $cleaned?>"><?= $content?></a><?
