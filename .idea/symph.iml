@@ -133,6 +133,12 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/webpack-encore-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/symfony/deprecation-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/symfony/polyfill-php81" />
+      <excludeFolder url="file://$MODULE_DIR$/local/composer/vendor/twig/twig" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

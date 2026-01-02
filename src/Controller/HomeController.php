@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,11 +32,33 @@ final class HomeController extends AbstractController
             ->getQuery()->getResult();
         /** @var Product[] $res */
         foreach ($res as $product) {
-            $product->setColor('silver');
+            if($product->getId() == 1) {
+                $product->setColor('red');
+                $categoryQuery = $em->createQueryBuilder()
+                    ->select('p', 'c')
+                    ->from(Category::class, 'c')
+                    ->join('c.products', 'p')
+                    ->where('c.id = :category')
+                    ->orWhere('c.id = :category')
+                    ->andWhere('c.id = :category')
+                    ->setParameter('category', 1)
+                    ->getQuery();
+                $dql = $categoryQuery->getDQL();
+                $category = $categoryQuery
+                    ->getOneOrNullResult();
+                $product->setCategory($category);
+                $category->getProducts()->add($product);
+            } else {
+                $product->setColor('silver');
+            }
         }
         $em->flush();
 
-        require __DIR__ . '/../../local/php_interface/init.php';
+        /*$c = new Category();
+        $c->setName('Test category');
+        $em->persist($c);
+        $em->flush();*/
+        ///require __DIR__ . '/../../local/php_interface/init.php';
 
         gsv_dump(0);
         $b24app = new \Gsv\Util\Bitrix24\Bitrix24App();
@@ -51,6 +74,27 @@ final class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
+        ]);
+    }
+
+
+    #[Route('/kaira/kaira', name: 'kaira')]
+    public function kaira(EntityManagerInterface $em): Response
+    {
+        $q = $em->createQueryBuilder()
+            ->select('c')
+            ->from(Category::class, 'c');
+        $dql = $q->getDQL();
+        $categories = $q
+            ->getQuery()
+            ->getResult();
+        /** @var Category[] $categories */
+        foreach ($categories as $category) {
+        }
+        $em->flush();
+
+        return $this->render('kaira/index.html.twig', [
+            'categories' => $categories,
         ]);
     }
 }

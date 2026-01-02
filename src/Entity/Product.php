@@ -25,6 +25,9 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $color = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Category $category = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Product
     public function setColor(?string $color): static
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
