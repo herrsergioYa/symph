@@ -79,7 +79,7 @@ final class HomeController extends AbstractController
 
 
     #[Route('/kaira/kaira', name: 'kaira')]
-    public function kaira(EntityManagerInterface $em): Response
+    public function kaira(EntityManagerInterface $em, \App\Service\UserManager $u): Response
     {
         $q = $em->createQueryBuilder()
             ->select('c')
@@ -93,8 +93,72 @@ final class HomeController extends AbstractController
         }
         $em->flush();
 
+        $user = $u->getCurrentUser();
+
+        $q = $em->createQueryBuilder()
+            ->select('c', 'p')
+            ->from(Category::class, 'c')
+            ->leftJoin('c.products', 'p')
+            ->where('c.code = :code')
+            ->setParameter('code', 'laptop')
+            /*->setMaxResults(1)*/;
+        $dql = $q->getDQL();
+        $laptop = $q->getQuery()->getOneOrNullResult();
+
         return $this->render('kaira/index.html.twig', [
             'categories' => $categories,
+            'laptop' => $laptop,
         ]);
+    }
+
+    #[Route('/kaira/auth/{userId}', name: 'auth')]
+    public function auth(\App\Service\UserManager $u, string $userId): Response
+    {
+        $u->authorize($userId);
+
+        return $this->redirectToRoute('kaira');
+    }
+
+    #[Route('/kaira/{code}', name: 'section')]
+    public function section(string $code, EntityManagerInterface $em): Response
+    {
+        $q = $em->createQueryBuilder()
+            ->select('c', 'p')
+            ->from(Category::class, 'c')
+            ->leftJoin('c.products', 'p')
+            ->where('c.code = :code')
+            ->setParameter('code', $code)
+            ->setMaxResults(1);
+        $dql = $q->getDQL();
+        $category = $q->getQuery()
+            ->getOneOrNullResult();
+        if($category == null) {
+            throw $this->createNotFoundException("Категория не существует");
+        } else {
+            return $this->render('kaira/section.html.twig', [
+                'category' => $category,
+            ]);
+        }
+    }
+
+    #[Route('/kaira/p/{code}', name: 'product')]
+    public function product(string $code, EntityManagerInterface $em): Response
+    {
+        $q = $em->createQueryBuilder()
+            ->select('p')
+            ->from(Product::class, 'p')
+            ->where('p.code = :code')
+            ->setParameter('code', $code)
+            ->setMaxResults(1);
+        $dql = $q->getDQL();
+        $product = $q->getQuery()
+            ->getOneOrNullResult();
+        if($product == null) {
+            throw $this->createNotFoundException("Категория не существует");
+        } else {
+            return $this->render('kaira/product.html.twig', [
+                'product' => $product,
+            ]);
+        }
     }
 }
