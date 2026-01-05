@@ -7,4 +7,13 @@ import './stimulus_bootstrap.js';
  */
 import './styles/app.css';
 
+import jQuery from 'jquery';
+
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+
+jQuery(document).ready(function () {
+    jQuery('[data-wishlist]').on('click', function (e) {
+        alert(1);
+        e.preventDefault();
+    })
+})

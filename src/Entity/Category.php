@@ -36,6 +36,9 @@ class Category
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $code = null;
 
+    #[ORM\ManyToOne(inversedBy: 'categories')]
+    private ?Picture $picture = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -108,6 +111,18 @@ class Category
     public function setCode(?string $code): static
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getPicture(): ?Picture
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?Picture $picture): static
+    {
+        $this->picture = $picture;
 
         return $this;
     }
