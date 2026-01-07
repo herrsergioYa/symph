@@ -57,6 +57,10 @@ Encore
         config.useBuiltIns = 'usage';
         config.corejs = 3;
     })
+    .addExternals({
+        jquery: 'jQuery',
+    })
+    .enableVueLoader(() => {}, { version: 3 })
 
     // enables Sass/SCSS support
     //.enableSassLoader()
