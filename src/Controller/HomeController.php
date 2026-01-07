@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\CartItem;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -37,7 +39,7 @@ final class HomeController extends AbstractController
                 $categoryQuery = $em->createQueryBuilder()
                     ->select('p', 'c')
                     ->from(Category::class, 'c')
-                    ->join('c.products', 'p')
+                    ->leftJoin('c.products', 'p')
                     ->where('c.id = :category')
                     ->orWhere('c.id = :category')
                     ->andWhere('c.id = :category')
@@ -160,5 +162,84 @@ final class HomeController extends AbstractController
                 'product' => $product,
             ]);
         }
+    }
+
+    #[Route('/api/cart/add', methods: ['POST'], name: 'addToCart')]
+    public function addToCart(EntityManagerInterface $em, \App\Service\UserManager $u, Request $request): Response
+    {
+        $obParams = json_decode($request->getContent(), false);
+
+        $q = $em->createQueryBuilder()
+            ->select('p')
+            ->from(Product::class, 'p')
+            ->where('p.id = :id')
+            ->setParameter('id', $obParams->productId);
+        $dql = $q->getDQL();
+        /** @var Product $product */
+        $product = $q->getQuery()->getOneOrNullResult();
+
+        $success = false;
+        $user = $u->getCurrentUser();
+        if($product !== null && $user !== null) {
+            $q = $em->createQueryBuilder()
+                ->select('c')
+                ->from(CartItem::class, 'c')
+                ->where('c.product = :id')
+                ->andWhere('c.price = :price')
+                ->andWhere('c.user = :userId')
+                ->setParameter('id', $product->getId())
+                ->setParameter('price', $product->getPrice())
+                ->setParameter('userId', $user->getId());
+            $dql = $q->getDQL();
+            $cartItem = $q->getQuery()->getOneOrNullResult();
+            if($cartItem !== null) {
+                $cartItem->setQuantity($cartItem->getQuantity() + $obParams->quantity);
+            } else {
+                $cartItem = new CartItem();
+                $cartItem->setProduct($product);
+                $cartItem->setPrice($product->getPrice());
+                $cartItem->setUser($user);
+                $cartItem->setQuantity($obParams->quantity);
+                $em->persist($cartItem);
+            }
+            $em->flush();
+            $success = true;
+        }
+
+        return $this->json([
+            'success' => $success,
+        ]);
+    }
+
+    #[Route('/api/cart/list', methods: ['GET'], name: 'getCart')]
+    public function getCart(EntityManagerInterface $em, \App\Service\UserManager $u, Request $request): Response
+    {
+        $user = $u->getCurrentUser();
+        $q = $em->createQueryBuilder()
+            ->select('c')
+            ->from(CartItem::class, 'c')
+            ->where('c.user = :userId')
+            ->andWhere('c.orderProp is NULL')
+            ->setParameter("userId", $user?->getId());
+        $dql = $q->getDQL();
+        /** @var CartItem[] $cartItems */
+        $cartItems = $q->getQuery()->getResult();
+
+        $items = [];
+        foreach ($cartItems as $cartItem) {
+            $items[] = [
+                'product' => [
+                    'id' => $cartItem->getProduct()->getId(),
+                    'name' => $cartItem->getProduct()->getName(),
+                    'description' => $cartItem->getProduct()->getCategory()->getName(),
+                ],
+                'quantity' => $cartItem->getQuantity(),
+                'price' => $cartItem->getPrice(),
+            ];
+        }
+
+        return $this->json([
+            'items' => $items,
+        ]);
     }
 }
